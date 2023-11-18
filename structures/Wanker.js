@@ -43,6 +43,18 @@ const EncryptHandler = require("../utilities/EncryptHandler")
  * @property {number} removedAt
  */
 
+/**
+ * @callback HandlerFuncWithoutFlags
+ * @param {{ msg: import("oceanic.js").Message<import("oceanic.js").AnyTextableGuildChannel>, db: import("../manager/database"), logger: import("../manager/logger"), storage: import("../manager/storage"), client: import("../structures/Wanker"), args: string[] }}
+ * @returns {boolean|Promise<boolean>|any}
+ * 
+ * @callback HandlerFuncWithFlags
+ * @param {{ msg: import("oceanic.js").Message<import("oceanic.js").AnyTextableGuildChannel>, db: import("../manager/database"), logger: import("../manager/logger"), storage: import("../manager/storage"), client: import("../structures/Wanker"), args: string[], flags: [string, string[]] }}
+ * @returns {boolean|Promise<boolean>|any}
+ * 
+ * @typedef { { command: string[], handler: HandlerFuncWithoutFlags } | { command: string[], parseFlags: true, handler: HandlerFuncWithFlags } } Command
+ */
+
 module.exports = class Wanker extends Client {
     /**
      * @param {string} token If given, this will be appended to standard options object
@@ -90,9 +102,9 @@ module.exports = class Wanker extends Client {
         }
 
         /**
-         * @type { { command: string[], handler: function ({ msg: import("oceanic.js").Message<import("oceanic.js").AnyTextableGuildChannel>, db: import("../../manager/database"), logger: import("../../manager/logger"), storage: import("../../manager/storage"), client: import("../../structures/Wanker"), args: string[] }): Promise<boolean>|boolean }[] }
+         * @type {Command[]}
          */
-        this.messages = [];
+        this.commands = [];
 
         this.debug = false;
 

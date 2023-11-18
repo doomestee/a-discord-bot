@@ -43,9 +43,6 @@ module.exports = (stuff) => {
 
         const blacklist = await database.isBlacklisted(msg.author.id);
 
-        console.log("s", snipable);
-        console.log("b", blacklist[0]);
-
         if (blacklist[0] === 0 && snipable === 2) {
             let flagStart = false;
 
@@ -652,10 +649,20 @@ module.exports = (stuff) => {
         }
 
         const args = cunted.split(" ");
-        const cmd = client.messages.findIndex(v => v.command.some(c => c === args[0]));
+        const cmd = client.commands.findIndex(v => v.command.some(c => c === args[0]));
 
         if (blacklist[0] === 0 && cmd !== -1) {
-            const res = await client.messages[cmd].handler({ args, client, db: database, logger, msg, storage });
+            const extra = {};
+
+            if (client.commands[cmd].parseFlags) {
+                extra["flags"] = flaginator(cunted);
+
+                const indexF = args.findIndex(v => v.startsWith("-"));
+
+                if (indexF !== -1) args.splice(indexF);
+            }
+
+            const res = await client.commands[cmd].handler({ args, client, db: database, logger, msg, storage, ...extra });
 
             if (res !== false) return;
         }
@@ -730,8 +737,6 @@ module.exports = (stuff) => {
         await Promise.allSettled(promises).then((v) => {
             // TODO: care when an attachment fails to download.
         });
-
-        console.log("bbb");
 
         client.cache.messages.push({
             id: msg.id, content: EncryptionHandler.encrypt(msg.content),

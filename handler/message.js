@@ -11,7 +11,7 @@ module.exports = (client) => {
             let pull = require(`../commands/${dir}/${file}`);
 
             if (pull.handler) {
-                client.messages.push(pull);//messages.//.set(pull.name, pull);
+                client.commands.push(pull);//messages.//.set(pull.name, pull);
                 //table.addRow(file, "✅");
             } else {
                 //table.addRow(file, "❌ -> missing somethings?");

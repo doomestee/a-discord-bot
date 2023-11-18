@@ -187,8 +187,9 @@ module.exports = class DatabaseManager {
         if (gSnipe === 0) return 0;
         if (gSnipe === 3) return 2;
         if (cSnipe === 0) return 0;
-        if ((cSnipe === 1 || cSnipe === 2) && gSnipe === 1) return 2;
-        if ((cSnipe === 1 || cSnipe === 2) && (gSnipe === 2 || cSnipe === 2)) return 1;
+        if (cSnipe === 2 || gSnipe === 2) return 1;
+        if (cSnipe === 1 && gSnipe === 1) return 2;
+        if (cSnipe === 1 && gSnipe === 2) return 1;
         this._logger.error(`Uh oh, brain fart; gSnipe - ${gSnipe}, cSnipe - ${cSnipe}`);
         return 0;
     }
