@@ -1,0 +1,24 @@
+/log/**/**[-]**.txt
+
+#/cache/*
+!/cache/PLACEHOLDER.txt
+!/cache/messages/PLACEHOLDER.txt
+
+#development side stuff
+/data
+/log
+*.db
+
+.env
+/package-lock.json
+/node_modules
+/.vscode
+
+database.db
+
+*/.DS_Store
+.DS_Store
+.DS_Store?
+
+.dockerignore
+*.ts
