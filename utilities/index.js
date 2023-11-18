@@ -132,7 +132,11 @@ module.exports = {
      * @returns {[string, string][]}
      */
     flaginator: (strong) => {
-        const str = strong.slice(strong.indexOf("-"));
+        const index = strong.indexOf("-");
+
+        if (index === -1) return [];
+
+        const str = strong.slice(index);
 
         const strPlit = str.slice(1).split("-");
 
