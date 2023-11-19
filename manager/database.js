@@ -71,6 +71,7 @@ module.exports = class DatabaseManager {
             channel: {
                 insert: this.db.prepare("INSERT INTO guildChannelSettings (id, guildId, snipeMode) VALUES (" + repeatStr(3) + ")"),
                 selectById: this.db.prepare("SELECT * FROM guildChannelSettings WHERE id = ?"),
+                selectByGuildId: this.db.prepare("SELECT * FROM guildChannelSettings WHERE guildId = ?"),
                 updateSnipe: this.db.prepare("UPDATE guildChannelSettings SET snipeMode = ? WHERE id = ?")
             }
         }
@@ -137,7 +138,7 @@ module.exports = class DatabaseManager {
 
     /**
      * @param {string} guildId
-     * @param {string} channelId
+     * @param {string|string[]} channelId
      */
     refreshGuildSettings(guildId, channelId) {
         // CHECKS IF IT'S IN THE CACHE FIRST.
@@ -153,14 +154,30 @@ module.exports = class DatabaseManager {
             } else this.cache.guildsettings[guildId] = new GuildSettings(guildSet);
         }
 
-        if (channelId && this.cache.channelsettings[channelId] == undefined) {
-            const channelSet = this.prepared.channel.selectById.get(channelId);
+        if (channelId !== undefined) {
+            if (!Array.isArray(channelId)) channelId = [channelId];
 
-            if (channelSet === undefined) {
-                this.prepared.channel.insert.run(channelId, guildId, 0);
+            const toChange = [];
+            const channelSets = this.prepared.channel.selectByGuildId.all(guildId);
 
-                this.cache.channelsettings[channelId] = new GuildChannelSettings({ guildId, id: channelId, snipeMode: 0 });
-            } else this.cache.channelsettings[channelId] = new GuildChannelSettings(channelSet);
+            for (const chnlId of channelId) {
+                if (this.cache.channelsettings[chnlId] == undefined) {
+                    const channelSet = channelSets.find(v => v.id === chnlId);
+
+                    if (channelSet === undefined) toChange.push(chnlId);
+                    else this.cache.channelsettings[chnlId] = new GuildChannelSettings(channelSet);
+                }
+            }
+
+            const trans = this.db.transaction((chnls) => {
+                for (let chnl of chnls) {
+                    this.prepared.channel.insert.run(chnl, guildId, 0);
+                }
+            })
+
+            trans(toChange);
+
+            toChange.forEach((val) => this.cache.channelsettings[val] = new GuildChannelSettings({ guildId, id: val, snipeMode: 0 }));
         }
     }
 
@@ -214,6 +231,28 @@ module.exports = class DatabaseManager {
         this.refreshGuildSettings(guildId, channelId);
 
         if (obj.snipeMode !== undefined) { this.prepared.channel.updateSnipe.run(obj.snipeMode, channelId); this.cache.channelsettings[channelId].snipeMode = obj.snipeMode };
+    }
+
+    /**
+     * @param {string} guildId
+     * @param {string[]} channelIds
+     * @param {Omit<GuildChannelSettings, "id"|"guildId">} obj
+     */
+    updateGuildChannelsSettings(guildId, channelIds, obj) {
+        this.refreshGuildSettings(guildId, channelIds);
+
+        const trans = this.db.transaction((channelIds) => {
+            for (let channelId of channelIds) {
+                if (obj.snipeMode !== undefined) this.prepared.channel.updateSnipe.run(obj.snipeMode, channelId);
+            }
+        });
+        
+        trans(channelIds);
+        // If we made it past here, it was successful so now updating the cache.
+
+        for (let channelId of channelIds) {
+            if (obj.snipeMode !== undefined) this.cache.channelsettings[channelId].snipeMode = obj.snipeMode;
+        }
     }
 
     /**

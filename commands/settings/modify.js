@@ -1,3 +1,4 @@
+const { TextableChannelTypes } = require("oceanic.js");
 const { regexes } = require("../../utilities");
 
 /**
@@ -32,6 +33,26 @@ module.exports = {
                 }
 
                 db.updateGuildChannelSettings(msg.guildID, id, { snipeMode: args[0] === "disable" ? 0 : flags.length && flags.some(v => v[0] === "t") ? 2 : 1 });//args[2] === "track" ? 3 : 1 });
+                msg.createReaction("👍");
+                return true;
+            case "channels":
+                let ids = msg.guild.channels.filter(v => TextableChannelTypes.some(g => g === v.type) ).map(v => v.id);
+
+                if (args.length > 3) {
+                    ids = [];
+
+                    for (let arg of args.slice(2)) {
+                        let snow = arg.match(regexes.snowflake);
+
+                        if (snow === null || snow.length === 0) { msg.channel.createMessage({ content: "One of the channel given (" + arg + ") is not a valid channel mention/id. (Please don't use the name)", messageReference: { failIfNotExists: true, messageID: msg.id } }); return false; }
+
+                        if (!msg.guild.channels.has(snow[0])) { msg.channel.createMessage({ content: "One of the channel given (" + snow[0] + ") isn't of this server.", messageReference: { failIfNotExists: true, messageID: msg.id } }); return false; }
+
+                        ids.push(snow[0]);
+                    }
+                }
+
+                db.updateGuildChannelsSettings(msg.guildID, ids, { snipeMode: args[0] === "disable" ? 0 : flags.length && flags.some(v => v[0] === "t") ? 2 : 1 });
                 msg.createReaction("👍");
                 return true;
         }
