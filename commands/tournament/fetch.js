@@ -15,6 +15,7 @@ module.exports = {
      */
     preCheck: ({ msg }) => {
         if (msg.guildID !== "565155762335383581" && msg.guildID !== "293099269064359936") return false;
+        if (msg.channelID === "293099269064359936") return false;
 
         return true;
     },
@@ -22,8 +23,10 @@ module.exports = {
     /**
      * @type {import("../../structures/Wanker").HandlerFuncWithoutFlags}
      */
-    handler: async ({ client, msg, db, browser }) => {
+    handler: async ({ client, msg, db, browser, args }) => {
         if (!browser.initialised) { msg.createReaction("⌛"); return true; }
+
+        if (args.length > 1) return false;
 
         return msg.channel.createMessage({
             files: [{
