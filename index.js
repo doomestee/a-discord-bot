@@ -4,6 +4,8 @@ const inProduction = process.env.NODE_ENV === "production";
 
 const logger = new (require("./manager/logger"))(inProduction ? "/data/log/" : "./log/");
 const storage = new (require("./manager/storage"))();
+const browser = new (require("./manager/browser"))();
+const cooldown = new (require("./manager/cooldown"))();
 
 const { readdirSync, statSync, existsSync, mkdirSync } = require("fs");
 const Wanker = require("./structures/Wanker");
@@ -13,7 +15,7 @@ const client = new Wanker("Bot " + process.env.DISCORD_CLIENT_TOKEN);
 const database = new (require("./manager/database"))(inProduction ? "/data/main.db" : "./main.db", logger, client);
 
 module.exports = {
-    client, logger, storage, database, inProduction
+    client, logger, storage, database, inProduction, browser, cooldown
 }
 
 process.on('uncaughtException', (err) => {
