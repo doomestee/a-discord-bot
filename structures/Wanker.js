@@ -208,7 +208,7 @@ module.exports = class Wanker extends Client {
                         if (orig.content === content
                             && reversed[0].user.id === reversed[i].user.id
                             && reversed[0].channel.id === reversed[i].channel.id
-                            && reversed[0].guild.id === reversed[i].guild.id && v.guild.id === guildId
+                            && reversed[0].guild.id === guildId
                             && !reversed[0].attachments.length) list.push(reversed[i]);
                         else break;
                     }
@@ -241,7 +241,11 @@ module.exports = class Wanker extends Client {
                 }
 
             } else {
-                msg = this.jsons.msg.value.deletedMsg.splice(this.jsons.msg.value.deletedMsg.length - 1)[0];//this.cache.deleted_msg.splice(this.cache.deleted_msg.length - 1)[0];
+                let index = findLastIndex(this.jsons.msg.value.deletedMsg, v => v.guild.id === guildId);
+    
+                if (index === -1) return null;
+    
+                msg = this.jsons.msg.value.deletedMsg.splice(index, 1)[0];
             }
 
             this.jsons.msg.saveQueue();
@@ -314,7 +318,11 @@ module.exports = class Wanker extends Client {
                 }
                 
             } else {
-                msg = this.jsons.msg.value.editedMsg.splice(this.jsons.msg.value.editedMsg.length - 1)[0];//this.cache.edited_msg.splice(this.cache.edited_msg.length - 1)[0];
+                let index = findLastIndex(this.jsons.msg.value.editedMsg, v => v.guild.id === guildId);
+    
+                if (index === -1) return null;
+    
+                msg = this.jsons.msg.value.editedMsg.splice(index, 1)[0];
             }
 
             this.jsons.msg.saveQueue();
