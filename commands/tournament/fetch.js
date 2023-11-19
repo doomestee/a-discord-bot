@@ -14,7 +14,7 @@ module.exports = {
      * @type {import("../../structures/Wanker").HandlerFuncWithoutFlags}
      */
     preCheck: ({ msg }) => {
-        if (msg.guildID !== "565155762335383581") return false;
+        if (msg.guildID !== "565155762335383581" && msg.guildID !== "293099269064359936") return false;
 
         return true;
     },
