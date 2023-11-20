@@ -47,6 +47,10 @@ const EncryptHandler = require("../utilities/EncryptHandler")
  * @callback PreCheckFunc
  * @param {{ msg: import("oceanic.js").Message<import("oceanic.js").AnyTextableGuildChannel>, db: import("../manager/database"), logger: import("../manager/logger"), storage: import("../manager/storage"), client: import("../structures/Wanker"), browser: import("../manager/browser"), cooldown: import("../manager/cooldown"), args: string[] }}
  * @returns {boolean}
+ * 
+ * @callback onCoolingDownFunc
+ * @param {{ msg: import("oceanic.js").Message<import("oceanic.js").AnyTextableGuildChannel>, db: import("../manager/database"), logger: import("../manager/logger"), storage: import("../manager/storage"), client: import("../structures/Wanker"), browser: import("../manager/browser"), cooldown: import("../manager/cooldown"), args: string[] }}
+ * @returns {boolean}
  */
 
 /**
@@ -58,7 +62,7 @@ const EncryptHandler = require("../utilities/EncryptHandler")
  * @param {{ msg: import("oceanic.js").Message<import("oceanic.js").AnyTextableGuildChannel>, db: import("../manager/database"), logger: import("../manager/logger"), storage: import("../manager/storage"), client: import("../structures/Wanker"), browser: import("../manager/browser"), cooldown: import("../manager/cooldown"), args: string[], flags: [string, string[]] }}
  * @returns {boolean|Promise<boolean>|any}
  * 
- * @typedef { { command: string[], cooldown: Partial<{ user: number, channel: number, guild: number }>, id: string, preCheck?: PreCheckFunc, handler: HandlerFuncWithoutFlags } | { command: string[], cooldown: Partial<{ user: number, channel: number, guild: number }>, id: string, preCheck?: PreCheckFunc, parseFlags: true, handler: HandlerFuncWithFlags } } Command
+ * @typedef { { command: string[], trigger: RegExp[], cooldownRespond?: onCoolingDownFunc, cooldown: Partial<{ user: number, channel: number, guild: number }>, id: string, preCheck?: PreCheckFunc, handler: HandlerFuncWithoutFlags } | { command: string[], trigger: RegExp[], cooldownRespond?: onCoolingDownFunc, cooldown: Partial<{ user: number, channel: number, guild: number }>, id: string, preCheck?: PreCheckFunc, parseFlags: true, handler: HandlerFuncWithFlags } } Command
  */
 
 module.exports = class Wanker extends Client {
@@ -188,6 +192,8 @@ module.exports = class Wanker extends Client {
              */
             let msg;
 
+            console.log(criteria);
+
             if (criteria) {
                 if (typeof criteria === "string") {
                     let index = findLastIndex(this.jsons.msg.value.deletedMsg, (v => v.channel.id === criteria && v.guild.id === guildId));
@@ -213,13 +219,12 @@ module.exports = class Wanker extends Client {
                         else break;
                     }
 
-                    this.jsons.msg.value.deletedMsg.splice(this.jsons.msg.value.deletedMsg.length - list.length, list.length)[0]; this.jsons.msg.saveQueue();
-                    this.jsons.msg.saveQueue();
+                    this.jsons.msg.value.deletedMsg.splice(this.jsons.msg.value.deletedMsg.length - list.length, list.length)[0];
 
                     return list.map(v => messageWrap(v));
                 } else if (Array.isArray(criteria)) {
                     if (typeof criteria[0] === "boolean") {
-                        let index = findLastIndex(this.jsons.msg.value.deletedMsg, (v => v.guild.id === guildId && criteria[0] ? criteria.includes(v.channel.id) : !criteria.includes(v.channel.id)));
+                        let index = findLastIndex(this.jsons.msg.value.deletedMsg, (v => v.guild.id === guildId && (criteria[0] ? criteria.includes(v.channel.id) : !criteria.includes(v.channel.id))));
     
                         if (index === -1) return { success: false, reason: "CRITERIA_FAILED" };
     
@@ -303,7 +308,7 @@ module.exports = class Wanker extends Client {
                     msg = this.jsons.msg.value.editedMsg.splice(index, 1)[0];
                 } else if (Array.isArray(criteria)) {
                     if (typeof criteria[0] === "boolean") {
-                        let index = findLastIndex(this.jsons.msg.value.editedMsg, (v => v.guild.id === guildId && criteria[0] ? criteria.includes(v.channel.id) : !criteria.includes(v.channel.id)));
+                        let index = findLastIndex(this.jsons.msg.value.editedMsg, (v => v.guild.id === guildId && (criteria[0] ? criteria.includes(v.channel.id) : !criteria.includes(v.channel.id))));
     
                         if (index === -1) return { success: false, reason: "CRITERIA_FAILED" };
     

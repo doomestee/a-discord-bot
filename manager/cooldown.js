@@ -131,9 +131,9 @@ module.exports = class CooldownManager {
 
         if (!bypassCheck && (duration+time) <= Date.now()) return false;
 
-        let added = this.addCooldown(id, command, duration+time);
+        let added = this.addCooldown(id, command, duration+time, type);
 
-        if (added[0]) return true;
+        if (added) return true;
 
         this._list[type][id][command] = time + duration;
 
