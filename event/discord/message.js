@@ -272,6 +272,7 @@ module.exports = (stuff) => {
                         case "254760236034949120": lazyFunc("Anti Mauxy: Deleted in #" + stuff.channel.name, 0xE810A7); break;
                         case "346018784101793793": lazyFunc("Anti xDDDD: Deleted in #" + stuff.channel.name, 0x4490F7); break;
                         case "381779063070785536": lazyFunc("Anti Meer: Deleted in #" + stuff.channel.name, 0x000000); break;
+                        case "192156584002977792": lazyFunc("Re-Hawk: Deleted in #" + stuff.channel.name, 0x0000AA); break;
                         default: lazyFunc("Test Test", 0x1DF287); break;
                     };
                 }
@@ -782,8 +783,8 @@ module.exports = (stuff) => {
             let userId = snipeo[2].user.id; //(snipeo[2].type !== 3) ? snipeo[2].userId : snipeo[2].user.id;
 
             if (client.debug) console.log(userId);
-            // max, nav, meer
-            if (!["254760236034949120", "346018784101793793", "381779063070785536"].includes(userId)) return;
+            // max, nav, meer, mihawk
+            if (!["254760236034949120", "346018784101793793", "381779063070785536", "192156584002977792"]).includes(userId)) return;
 
             if (client.debug) console.log(1);
 
