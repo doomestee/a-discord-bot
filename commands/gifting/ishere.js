@@ -2,7 +2,7 @@
  * @type {import("../../structures/Wanker").Command}
  */
 module.exports = {
-    trigger: [/\b(?:is|has)?\s*(?:the\s*)?(?:gifting\s*)?(?:event|season)?\s*(?:here|on)\b/],
+    trigger: [/\b(?:is|has)\s*(?:gifting)\s*(?:here|on|started)\b/i],
 
     cooldownRespond: () => {
         return;
