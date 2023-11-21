@@ -784,7 +784,7 @@ module.exports = (stuff) => {
 
             if (client.debug) console.log(userId);
             // max, nav, meer, mihawk
-            if (!["254760236034949120", "346018784101793793", "381779063070785536", "192156584002977792"]).includes(userId)) return;
+            if (!["254760236034949120", "346018784101793793", "381779063070785536", "192156584002977792"].includes(userId)) return;
 
             if (client.debug) console.log(1);
 
