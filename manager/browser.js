@@ -16,7 +16,7 @@ module.exports = class BrowserManager {
             tournament: null
         };
 
-        this.initialise();
+        //this.initialise();
     }
 
     async initialise() {

@@ -650,19 +650,29 @@ module.exports = (stuff) => {
         }
 
         const args = cunted.split(" ");
-        const cmd = client.commands.findIndex(v => v.command?.some(c => c === args[0]) || v.trigger?.some(v => cunted.match(v) !== null));
+
+        var match = [];
+        const cmd = client.commands.findIndex(v => v.command?.some(c => c === args[0]) || v.trigger?.some(v => (match = cunted.match(v)) !== null));
 
         if (blacklist[0] === 0 && cmd !== -1 && (client.commands[cmd].preCheck === undefined || client.commands[cmd].preCheck({ args, client, db: database, logger, msg, storage, browser, cooldown }))) {
             const extra = {};
 
             if (client.commands[cmd].cooldown) {
-                if (client.commands[cmd].cooldown.user &&    !cooldown.checkCooldown(msg.author.id, client.commands[cmd].id, msg.createdAt.getTime())[0]) return client.commands[cmd].cooldownRespond ? client.commands[cmd].cooldownRespond({ args, client, db: database, logger, msg, storage, browser, cooldown }) : msg.channel.createMessage({ content: "You're in cooldown for this command, please wait!", messageReference: { messageID: msg.id } });
+                const cools = [
+                    client.commands[cmd].cooldown.user ? !cooldown.checkCooldown(msg.author.id, client.commands[cmd].id, msg.createdAt.getTime())[0] : false,
+                    client.commands[cmd].cooldown.channel ? !cooldown.checkCooldown(msg.channelID, client.commands[cmd].id, msg.createdAt.getTime(), "channel")[0] : false,
+                    client.commands[cmd].cooldown.guild ? !cooldown.checkCooldown(msg.guildID, client.commands[cmd].id, msg.createdAt.getTime(), "guild")[0] : false,
+                ];
+
+                if (cools.some(v => v === true)) return client.commands[cmd].cooldownRespond ? client.commands[cmd].cooldownRespond({ args, client, db: database, logger, msg, storage, browser, cooldown }) : msg.channel.createMessage({ content: "This command is in cooldown, please wait!", messageReference: { messageID: msg.id } });
+
+                if (client.commands[cmd].cooldown.user &&    cools[0]) return client.commands[cmd].cooldownRespond ? client.commands[cmd].cooldownRespond({ args, client, db: database, logger, msg, storage, browser, cooldown }) : msg.channel.createMessage({ content: "You're in cooldown for this command, please wait!", messageReference: { messageID: msg.id } });
                 else if (client.commands[cmd].cooldown.user) cooldown.updateCooldown(msg.author.id, client.commands[cmd].id, client.commands[cmd].cooldown.user, Date.now(), true);
                 
-                if (client.commands[cmd].cooldown.channel &&    !cooldown.checkCooldown(msg.channelID, client.commands[cmd].id, msg.createdAt.getTime(), "channel")[0]) return client.commands[cmd].cooldownRespond ? client.commands[cmd].cooldownRespond({ args, client, db: database, logger, msg, storage, browser, cooldown }) : msg.channel.createMessage({ content: "This channel is in cooldown for this command, please wait!", messageReference: { messageID: msg.id } });
+                if (client.commands[cmd].cooldown.channel &&    cools[1]) return client.commands[cmd].cooldownRespond ? client.commands[cmd].cooldownRespond({ args, client, db: database, logger, msg, storage, browser, cooldown }) : msg.channel.createMessage({ content: "This channel is in cooldown for this command, please wait!", messageReference: { messageID: msg.id } });
                 else if (client.commands[cmd].cooldown.channel) cooldown.updateCooldown(msg.channelID, client.commands[cmd].id, client.commands[cmd].cooldown.channel, Date.now(), true, "channel");
                 
-                if (client.commands[cmd].cooldown.guild &&   !cooldown.checkCooldown(msg.guildID,   client.commands[cmd].id, msg.createdAt.getTime(),  "guild")[0]) return client.commands[cmd].cooldownRespond ? client.commands[cmd].cooldownRespond({ args, client, db: database, logger, msg, storage, browser, cooldown }) : msg.channel.createMessage({ content: "This server is in cooldown for this command, please wait!", messageReference: { messageID: msg.id } });
+                if (client.commands[cmd].cooldown.guild &&    cools[2]) return client.commands[cmd].cooldownRespond ? client.commands[cmd].cooldownRespond({ args, client, db: database, logger, msg, storage, browser, cooldown }) : msg.channel.createMessage({ content: "This server is in cooldown for this command, please wait!", messageReference: { messageID: msg.id } });
                 else if (client.commands[cmd].cooldown.guild) cooldown.updateCooldown(msg.guildID, client.commands[cmd].id, client.commands[cmd].cooldown.guild, Date.now(), true, "guild");
             }
 
@@ -673,6 +683,10 @@ module.exports = (stuff) => {
 
                 if (indexF !== -1) args.splice(indexF);
             }
+
+            if (match !== null && match.length) {
+                extra["captured"] = match.slice(1);
+            } else extra["captured"] = [];
 
             const res = await client.commands[cmd].handler({ args, client, db: database, logger, msg, storage, browser, cooldown, ...extra });
 

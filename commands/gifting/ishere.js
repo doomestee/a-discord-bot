@@ -2,7 +2,7 @@
  * @type {import("../../structures/Wanker").Command}
  */
 module.exports = {
-    trigger: [/\b(?:is|has)\s*(?:gifting)\s*(?:here|on|started)\b/i],
+    trigger: [/\b(?:is|has)\s*(?:gifting|gift|gifts|christmas gift|christmas gifting|christmas gifts)\s*(?:here|on|started)\b/i],
 
     cooldownRespond: () => {
         return;
@@ -14,7 +14,7 @@ module.exports = {
     },
 
     /**
-     * @type {import("../../structures/Wanker").HandlerFuncWithoutFlags}
+     * @type {import("../../structures/Wanker").PreCheckFunc}
      */
     preCheck: ({ msg }) => {
         if (msg.guildID !== "565155762335383581" && msg.guildID !== "293099269064359936") return false;
@@ -26,7 +26,7 @@ module.exports = {
     /**
      * @type {import("../../structures/Wanker").HandlerFuncWithoutFlags}
      */
-    handler: async ({ client, msg }) => {
+    handler: async ({ client, msg, captured }) => {
         const date = new Date();
 
         if (date > new Date(2023, 11, 4, 15)) return; // It's already that time!
