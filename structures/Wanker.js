@@ -55,11 +55,11 @@ const EncryptHandler = require("../utilities/EncryptHandler")
 
 /**
  * @callback HandlerFuncWithoutFlags
- * @param {{ msg: import("oceanic.js").Message<import("oceanic.js").AnyTextableGuildChannel>, db: import("../manager/database"), logger: import("../manager/logger"), storage: import("../manager/storage"), client: import("../structures/Wanker"), browser: import("../manager/browser"), cooldown: import("../manager/cooldown"), args: string[] }}
+ * @param {{ msg: import("oceanic.js").Message<import("oceanic.js").AnyTextableGuildChannel>, db: import("../manager/database"), logger: import("../manager/logger"), storage: import("../manager/storage"), client: import("../structures/Wanker"), browser: import("../manager/browser"), cooldown: import("../manager/cooldown"), args: string[], captured: string[] }}
  * @returns {boolean|Promise<boolean>|any}
  * 
  * @callback HandlerFuncWithFlags
- * @param {{ msg: import("oceanic.js").Message<import("oceanic.js").AnyTextableGuildChannel>, db: import("../manager/database"), logger: import("../manager/logger"), storage: import("../manager/storage"), client: import("../structures/Wanker"), browser: import("../manager/browser"), cooldown: import("../manager/cooldown"), args: string[], flags: [string, string[]] }}
+ * @param {{ msg: import("oceanic.js").Message<import("oceanic.js").AnyTextableGuildChannel>, db: import("../manager/database"), logger: import("../manager/logger"), storage: import("../manager/storage"), client: import("../structures/Wanker"), browser: import("../manager/browser"), cooldown: import("../manager/cooldown"), args: string[], captured: string[], flags: [string, string[]] }}
  * @returns {boolean|Promise<boolean>|any}
  * 
  * @typedef { { command: string[], trigger: RegExp[], cooldownRespond?: onCoolingDownFunc, cooldown: Partial<{ user: number, channel: number, guild: number }>, id: string, preCheck?: PreCheckFunc, handler: HandlerFuncWithoutFlags } | { command: string[], trigger: RegExp[], cooldownRespond?: onCoolingDownFunc, cooldown: Partial<{ user: number, channel: number, guild: number }>, id: string, preCheck?: PreCheckFunc, parseFlags: true, handler: HandlerFuncWithFlags } } Command
