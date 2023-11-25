@@ -192,8 +192,6 @@ module.exports = class Wanker extends Client {
              */
             let msg;
 
-            console.log(criteria);
-
             if (criteria) {
                 if (typeof criteria === "string") {
                     let index = findLastIndex(this.jsons.msg.value.deletedMsg, (v => v.channel.id === criteria && v.guild.id === guildId));

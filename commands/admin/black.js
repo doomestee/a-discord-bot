@@ -41,7 +41,7 @@ module.exports = {
 
             const dates = [new Date()];
 
-            if (duration) dates[1] = new Date(Date.now() = ms(duration));
+            if (duration) dates[1] = new Date(Date.now() + ms(duration));
 
             return db.addblacklistID(entityId, type === undefined ? "0" : type, msg.author.id, dates);
         } else return client.rest.channels.createReaction(msg.channelID, msg.id, "❄");
