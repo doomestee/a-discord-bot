@@ -29,8 +29,6 @@ module.exports = {
     handler: async ({ client, msg, captured }) => {
         const date = new Date();
 
-        if (date > new Date(2023, 11, 4, 15)) return; // It's already that time!
-
         return msg.channel.createMessage({
             content: "Use /open1000gifts to open 1000 gifts.",
             messageReference: { messageID: msg.id, failIfNotExists: true }
