@@ -24,6 +24,8 @@ module.exports = {
      * @type {import("../../structures/Wanker").HandlerFuncWithoutFlags}
      */
     handler: async ({ client, msg, db, browser, args }) => {
+        return msg.createReaction("⛔");
+
         if (!browser.initialised) { msg.createReaction("⌛"); return true; }
 
         if (args.length > 1) return false;

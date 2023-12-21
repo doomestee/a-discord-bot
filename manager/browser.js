@@ -1,4 +1,4 @@
-const puppeteer = require("puppeteer");
+// const puppeteer = require("puppeteer");
 
 module.exports = class BrowserManager {
     constructor() {
@@ -20,6 +20,8 @@ module.exports = class BrowserManager {
     }
 
     async initialise() {
+        return;
+
         this.browser = await puppeteer.launch({
             args: ['--no-sandbox', '--headless', '--disable-gpu', '--disable-dev-shm-usage'],
             defaultViewport: {
@@ -37,6 +39,7 @@ module.exports = class BrowserManager {
      * @returns {Promise<Buffer>}
      */
     getTournamentShot() {
+        return;
         // welp it was simpler than i expected
         return this.pages.tournament.screenshot({
             clip: {
