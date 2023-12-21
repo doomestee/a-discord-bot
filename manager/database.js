@@ -89,11 +89,11 @@ module.exports = class DatabaseManager {
     /**
      * @param {string} entityid
      * @param {string} source
-     * @param {[Date|null, Date|null]} dates
+     * @param {[number|null, number|null]} dates
      * @param {0|1} type Type 0 for user, 1 for guild.
      */
-    addblacklistID(entityid, type=0, source, dates=[new Date()]) {
-        const toSpread = [dates.length ? dates[0] : new Date()];
+    addblacklistID(entityid, type=0, source, dates=[Date.now()]) {
+        const toSpread = [dates.length ? dates[0] : Date.now()];
 
         if (dates.length > 1) toSpread[1] = dates[1];
 

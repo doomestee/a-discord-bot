@@ -36,14 +36,14 @@ module.exports = {
         let duration = args[2];
         let type = args[3];
 
-        if (entityId.match(regexes.snowflake).length) {
-            if (!(type === "0" || type === "1" || type === undefined)) return client.rest.channels.createReaction(msg.channelID, msg.id, "�");
+        if (entityId.match(regexes.snowflake)?.length) {
+            if (!(type === "0" || type === "1" || type === undefined)) return client.rest.channels.createReaction(msg.channelID, msg.id, "🥸");
 
-            const dates = [new Date()];
+            const dates = [Date.now(), null];
 
-            if (duration) dates[1] = new Date(Date.now() + ms(duration));
+            if (duration && duration.length > 0) dates[1] = (dates[0] + ms(duration));
 
-            return db.addblacklistID(entityId, type === undefined ? "0" : type, msg.author.id, dates);
+            return db.addblacklistID(entityId, type === undefined ? 0 : parseInt(type), msg.author.id, dates);
         } else return client.rest.channels.createReaction(msg.channelID, msg.id, "❄");
     }
 }

@@ -30,7 +30,7 @@ module.exports = {
         const date = new Date();
 
         return msg.channel.createMessage({
-            content: "Use /open1000gifts to open 1000 gifts.",
+            content: "Use /open100gifts to open 100 gifts at a time.",
             messageReference: { messageID: msg.id, failIfNotExists: true }
         }).catch(() => {});
 
