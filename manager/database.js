@@ -120,6 +120,8 @@ module.exports = class DatabaseManager {
         }
 
         if (select.length) {
+            const time = Date.now();
+
             /**
              * @type {[0|1, Blacklist[]]}
              */
@@ -129,7 +131,7 @@ module.exports = class DatabaseManager {
                 result[1].push(new Blacklist(select[i]));
 
                 //if (result[0] === 1 && result[1][i].end > result[1][i].end) result[0] = 0;
-                if (result[0] === 0 && (result[1][i].end === null || new Date() < result[1][i].end)) result[0] = 1;//if (result[0] === 1 && result[1][i].end !== null && new Date() > result[1][i].end) result[0] = 0;
+                if (result[0] === 0 && (result[1][i].end === null || time < result[1][i].end)) result[0] = 1;//if (result[0] === 1 && result[1][i].end !== null && new Date() > result[1][i].end) result[0] = 0;
             }
 
             return result;

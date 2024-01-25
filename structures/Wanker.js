@@ -1,3 +1,12 @@
+/*
+
+    WARNING: you're about to see an absolute mess of jsdoc and code down here.
+    Despite the github repo being a couple of months old, this project was actually active for a few years at the time of writing.
+    As of now, while I do love typescript, I just don't have the motivation to convert this to typescript.
+
+*/
+
+
 const { Client, User, Member, Constants } = require("oceanic.js");
 
 const MessageStorage = require("./MessageStorage");
