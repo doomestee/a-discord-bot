@@ -189,12 +189,16 @@ module.exports = (stuff) => {
                     criteria = [2, "126414557819174912"]
 
                 // 892932950977544212 is marcel ID
-                if (criteria === null && msg.author.id === "892932950977544212")
-                    criteria = [2, "892932950977544212"]
+                // if (criteria === null && msg.author.id === "892932950977544212")
+                //     criteria = [2, "892932950977544212"]
 
                 // 656289455283372072 is pukar ID
                 if (criteria === null && msg.author.id === "656289455283372072")
                     criteria = [2, "656289455283372072"]
+
+                // 304722487374249996 is niko ID
+                if (msg.author.id === "304722487374249996")
+                    criteria = [2, "304722487374249996", "126414557819174912"]
 
                 /**
                  * @type {import("../../structures/Wanker").DeletedMessage|import("../../structures/Wanker").EditedMessage|import("../../structures/Wanker").RemovedReaction|{type: 4, messages: import("../../structures/Wanker").DeletedMessage[]}}
@@ -495,10 +499,13 @@ module.exports = (stuff) => {
                 if (msg.author.id === "126414557819174912") criteria = [2, "126414557819174912"];
 
                 // 892932950977544212 is marcel ID
-                if (msg.author.id === "892932950977544212") criteria = [2, "892932950977544212"]
+                // if (msg.author.id === "892932950977544212") criteria = [2, "892932950977544212"]
 
                 // 656289455283372072 is pukar ID
                 if (msg.author.id === "656289455283372072") criteria = [2, "656289455283372072"]
+
+                // 304722487374249996 is niko ID
+                if (msg.author.id === "304722487374249996") criteria = [2, "304722487374249996", "126414557819174912"]
 
                 let stuff = cunted === "snipe" ? client.snipe(msg.guildID, criteria) : cunted === "esnipe" || cunted === "edit snipe" ? client.esnipe(msg.guildID, undefined, undefined, undefined, criteria) : client.rsnipe(msg.guildID);
 
