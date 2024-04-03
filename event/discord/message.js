@@ -36,6 +36,15 @@ module.exports = (stuff) => {
 
         let cunted = msg.content.toLowerCase();
 
+        if (msg.guildID === "565155762335383581" && (msg.channelID === "1112134637918109716" || msg.channelID === "1112134673968152647")) {
+            msg.delete("No man's land");
+            client.rest.guilds.editMember(msg.guildID, msg.member.id, {
+                communicationDisabledUntil: new Date(Date.now() + 10000)
+            });
+
+            return;
+        }
+
         if (msg.author && msg.author.bot) return;
         if (msg.member && msg.member.user.bot) return;
 
