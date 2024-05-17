@@ -20,7 +20,7 @@ module.exports = class BrowserManager {
     }
 
     async initialise() {
-        return;
+        // return;
 
         this.browser = await puppeteer.launch({
             args: ['--no-sandbox', '--headless', '--disable-gpu', '--disable-dev-shm-usage'],
@@ -30,7 +30,7 @@ module.exports = class BrowserManager {
         });
 
         this.pages.tournament = await this.browser.newPage();
-        await this.pages.tournament.goto("https://challonge.com/kh1no18r/module");
+        await this.pages.tournament.goto("https://challonge.com/6circ68t/module");
 
         this.initialised = true;
     }

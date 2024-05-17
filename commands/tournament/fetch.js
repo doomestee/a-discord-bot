@@ -7,7 +7,8 @@ const { regexes } = require("../../utilities");
 module.exports = {
     command: ["tourney", "tournament"], id: "tourney_fetch",
     cooldown: {
-        user: 3000
+        user: 3000,
+        channel: 5000
     },
 
     /**
@@ -24,7 +25,7 @@ module.exports = {
      * @type {import("../../structures/Wanker").HandlerFuncWithoutFlags}
      */
     handler: async ({ client, msg, db, browser, args }) => {
-        return msg.createReaction("⛔");
+        // return msg.createReaction("⛔");
 
         if (!browser.initialised) { msg.createReaction("⌛"); return true; }
 
