@@ -16,7 +16,7 @@ module.exports = class BrowserManager {
             tournament: null
         };
 
-        //this.initialise();
+        this.initialise();
     }
 
     async initialise() {
@@ -39,7 +39,7 @@ module.exports = class BrowserManager {
      * @returns {Promise<Buffer>}
      */
     getTournamentShot() {
-        return;
+        // return;
         // welp it was simpler than i expected
         return this.pages.tournament.screenshot({
             clip: {
