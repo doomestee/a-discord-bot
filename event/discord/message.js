@@ -466,7 +466,7 @@ module.exports = (stuff) => {
                 if (tempo && !client.isMaintainer(msg.author.id)) {// && !["vendbot", "bot"].some(v => (msg.channel) ? msg.channel.name.toLowerCase().includes(v) : false)) {
                     if (client.temporary.blacks[msg.author.id] && Date.now() < (client.temporary.blacks[msg.author.id][0] + 30000)) return;
                     
-                    if (tempo[0].length >= 10 && tempo[0].every(v => (v + (1000*30)) > nowDate)) {
+                    if (tempo[0].length >= 100 && tempo[0].every(v => (v + (1000*180)) > nowDate)) {
                         let blackEndDate = nowDate + 1000*60*30;
 
                         // Ginger
@@ -474,7 +474,7 @@ module.exports = (stuff) => {
                         // Kimo
                         else if (["540224423567949834"].some(v => msg.author.id === v)) blackEndDate = nowDate + 1000*60*60;
 
-                        await database.addblacklistID(msg.author.id, 0, "AUTOMATIC", [new Date(), new Date(blackEndDate)]);
+                        await database.addblacklistID(msg.author.id, 0, "AUTOMATIC", [nowDate, blackEndDate]);
                         client.temporary.blacks[msg.author.id] = [Date.now(), blackEndDate];
                         
                         return client.rest.channels.createMessage(msg.channel.id, {
